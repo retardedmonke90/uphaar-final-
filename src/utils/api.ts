@@ -71,9 +71,9 @@ function writeStore<T>(key: string, value: T) {
 
 function getAdminFunctionUrl() {
   if (typeof window !== 'undefined' && window.location?.origin) {
-    return `${window.location.origin}/.netlify/functions/admin`;
+    return `${window.location.origin}/api/admin`;
   }
-  return '/.netlify/functions/admin';
+  return '/api/admin';
 }
 
 async function callAdminFunction(action: string, payload: AnyObj, adminSecret: string) {
