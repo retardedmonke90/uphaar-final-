@@ -77,29 +77,7 @@ function getAdminFunctionUrl() {
 }
 
 function resolveAdminSecret(adminSecret: string) {
-  const direct = String(adminSecret || '').trim();
-  if (direct) return direct;
-
-  if (typeof window !== 'undefined') {
-    const storageKeys = [
-      'ADMIN_ACCESS_CODE',
-      'adminAccessCode',
-      'admin-secret',
-      'admin_secret',
-      'adminCode',
-      'admin-code',
-    ];
-
-    for (const key of storageKeys) {
-      const local = window.localStorage?.getItem(key)?.trim();
-      if (local) return local;
-
-      const session = window.sessionStorage?.getItem(key)?.trim();
-      if (session) return session;
-    }
-  }
-
-  return '';
+  return String(adminSecret || '').trim();
 }
 
 async function callAdminFunction(action: string, payload: AnyObj, adminSecret: string) {
