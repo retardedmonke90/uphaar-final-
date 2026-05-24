@@ -113,15 +113,20 @@ export default async function handler(req: any, res: any) {
     const providedSecret =
       req.headers["x-admin-secret"] || "";
 
-    if (
-      !ADMIN_ACCESS_CODE ||
-      providedSecret !== ADMIN_ACCESS_CODE
-    ) {
-      return res.status(401).json({
-        success: false,
-        error: "Unauthorized",
-      });
-    }
+    console.log("PROVIDED:", providedSecret);
+console.log("EXPECTED:", ADMIN_ACCESS_CODE);
+
+if (
+  !ADMIN_ACCESS_CODE ||
+  providedSecret !== ADMIN_ACCESS_CODE
+) {
+  return res.status(401).json({
+    success: false,
+    error: "Unauthorized",
+    provided: providedSecret,
+    expected: ADMIN_ACCESS_CODE,
+  });
+}
 
     if (
       !SUPABASE_URL ||
