@@ -76,20 +76,54 @@ function getAdminFunctionUrl() {
   return '/api/admin';
 }
 
+function resolveAdminSecret(adminSecret: string) {
+  const direct = String(adminSecret || '').trim();
+  if (direct) return direct;
+
+  if (typeof window !== 'undefined') {
+    const storageKeys = [
+      'ADMIN_ACCESS_CODE',
+      'adminAccessCode',
+      'admin-secret',
+      'admin_secret',
+      'adminCode',
+      'admin-code',
+    ];
+
+    for (const key of storageKeys) {
+      const local = window.localStorage?.getItem(key)?.trim();
+      if (local) return local;
+
+      const session = window.sessionStorage?.getItem(key)?.trim();
+      if (session) return session;
+    }
+  }
+
+  return '';
+}
+
 async function callAdminFunction(action: string, payload: AnyObj, adminSecret: string) {
+  const resolvedAdminSecret = resolveAdminSecret(adminSecret);
+
   const response = await fetch(getAdminFunctionUrl(), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-admin-secret': adminSecret || '',
+      'x-admin-secret': resolvedAdminSecret,
     },
-    body: JSON.stringify({ action, ...payload }),
+    body: JSON.stringify({
+      action,
+      ...payload,
+      adminSecret: resolvedAdminSecret,
+    }),
   });
 
   const data = await response.json().catch(() => ({}));
+
   if (!response.ok || data?.success === false) {
     throw new Error(data?.error || `Admin ${action} failed`);
   }
+
   return data;
 }
 
