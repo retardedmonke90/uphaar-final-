@@ -117,7 +117,7 @@ export default function Admin() {
           featured: Boolean(form.featured),
           id: editingId || form.id || undefined,
         },
-        import.meta.env.VITE_ADMIN_ACCESS_CODE || 'phulwari-admin-access',
+        import.meta.env.VITE_ADMIN_ACCESS_CODE || '',
       );
       toast.success(editingId ? 'Product updated' : 'Product added');
       setForm(EMPTY_PRODUCT);
@@ -136,7 +136,7 @@ export default function Admin() {
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this product?')) return;
     try {
-      await api.adminDeleteProduct(id, import.meta.env.VITE_ADMIN_ACCESS_CODE || 'phulwari-admin-access');
+      await api.adminDeleteProduct(id, import.meta.env.VITE_ADMIN_ACCESS_CODE || '');
       toast.success('Product deleted');
       await loadDashboard();
     } catch (error: any) {
@@ -146,7 +146,7 @@ export default function Admin() {
 
   const updateStatus = async (orderId: string, orderStatus: string) => {
     try {
-      await api.updateOrderStatus(orderId, { orderStatus }, import.meta.env.VITE_ADMIN_ACCESS_CODE || 'phulwari-admin-access');
+      await api.updateOrderStatus(orderId, { orderStatus }, import.meta.env.VITE_ADMIN_ACCESS_CODE || '');
       toast.success(`Order marked as ${orderStatus}`);
       await loadDashboard();
     } catch (error: any) {
@@ -162,7 +162,7 @@ export default function Admin() {
           stock: nextStock,
           id: product.id,
         },
-        import.meta.env.VITE_ADMIN_ACCESS_CODE || 'phulwari-admin-access',
+        import.meta.env.VITE_ADMIN_ACCESS_CODE || '',
       );
       toast.success(nextStock === 0 ? 'Marked out of stock' : 'Product restocked');
       await loadDashboard();
