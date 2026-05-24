@@ -734,9 +734,19 @@ export const api = {
   },
 
   adminUpsertProduct: async (product: AnyObj, adminSecret: string) => {
-    const result = await callAdminFunction('upsert-product', { product }, adminSecret);
-    return { success: true, product: result.product };
-  },
+  console.log("ADMIN SECRET RECEIVED:", adminSecret);
+
+  const result = await callAdminFunction(
+    'upsert-product',
+    { product },
+    adminSecret
+  );
+
+  return {
+    success: true,
+    product: result.product,
+  };
+},
 
   adminDeleteProduct: async (id: string, adminSecret: string) => {
     await callAdminFunction('delete-product', { id }, adminSecret);
